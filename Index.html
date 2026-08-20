@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Becket Gemima — 20 ans</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  /* ============ DESIGN TOKENS ============ */
+  :root{
+    --ivoire:#FAF6EF;
+    --beige:#F0E8D8;
+    --beige-deep:#E4D8C0;
+    --noir:#1C1815;
+    --noir-soft:#24201B;
+    --gold:#AD8A4E;
+    --gold-soft:#D9BE8C;
+    --gold-glow:#EFDCAE;
+    --ink:#2B2620;
+    --ink-soft:#7A7264;
+    --ink-faint:#A79E8D;
+    --line:rgba(173,138,78,0.28);
+    --serif:'Fraunces', Georgia, serif;
+    --sans:'Inter', -apple-system, sans-serif;
+    --script:'Caveat', cursive;
+    --ease:cubic-bezier(.22,.68,.2,1);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ivoire);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-weight:300;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  body.locked{overflow:hidden;height:100vh;}
+  ::selection{background:var(--gold-soft);color:var(--noir);}
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+  :focus-visible{outline:2px solid var(--gold);outline-offset:4px;}
+
+  .eyebrow{
+    font-family:var(--sans);
+    font-size:.72rem;
+    letter-spacing:.32em;
+    text-transform:uppercase;
+    color:var(--gold);
+    font-weight:500;
+  }
+
+  /* ============ INTRO GATE ============ */
+  #intro-gate{
+    position:fixed;inset:0;z-index:9999;
+    background:var(--noir);
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+    transition:opacity 1.4s var(--ease), transform 1.4s var(--ease);
+  }
+  #intro-gate.leaving{opacity:0;transform:scale(1.06);pointer-events:none;}
+  #intro-gate::before{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(ellipse at 50% 30%, rgba(173,138,78,0.14), transparent 60%);
+  }
+  .particle{
+    position:absolute;bottom:-10px;
+    width:5px;height:5px;border-radius:50%;
+    background:var(--gold-glow);
+    opacity:0;
+    box-shadow:0 0 8px 2px rgba(239,220,174,0.5);
+    animation:drift linear infinite;
+  }
+  @keyframes drift{
+    0%{opacity:0;transform:translateY(0) translateX(0);}
+    10%{opacity:.7;}
+    90%{opacity:.4;}
+    100%{opacity:0;transform:translateY(-100vh) translateX(var(--driftX,20px));}
+  }
+  .skip-intro{
+    position:absolute;top:26px;right:28px;z-index:2;
+    font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;
+    color:rgba(250,246,239,.35);background:none;border:none;
+    font-family:var(--sans);cursor:pointer;padding:8px;
+    transition:color .3s;
+  }
+  .skip-intro:hover{color:rgba(250,246,239,.75);}
+
+  .intro-track{position:relative;width:100%;max-width:760px;padding:0 28px;text-align:center;z-index:1;}
+  .intro-slide{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    opacity:0;transform:translateY(14px);
+    transition:opacity 1.1s var(--ease), transform 1.1s var(--ease);
+    pointer-events:none;
+  }
+  .intro-slide.active{opacity:1;transform:translateY(0);pointer-events:auto;position:relative;}
+  .intro-slide p{
+    font-family:var(--serif);
+    font-style:italic;
+    font-weight:400;
+    font-size:clamp(1.2rem,3vw,1.7rem);
+    color:var(--ivoire);
+    line-height:1.6;
+    max-width:620px;
+  }
+  .intro-slide.long p{font-size:clamp(1rem,2.2vw,1.25rem);font-style:normal;color:rgba(250,246,239,.85);}
+  .intro-name{
+    font-family:var(--serif);
+    font-weight:500;
+    font-size:clamp(2.2rem,7vw,4.4rem);
+    letter-spacing:.05em;
+    color:var(--ivoire);
+    text-transform:uppercase;
+  }
+  .intro-number{
+    font-family:var(--serif);
+    font-weight:300;
+    font-size:clamp(4rem,14vw,8rem);
+    color:var(--gold-soft);
+    line-height:1;
+    margin-top:8px;
+    letter-spacing:.02em;
+  }
+  .intro-gap{height:18px;}
+  .intro-heart{color:var(--gold-soft);}
+
+  .intro-btn{
+    margin-top:34px;
+    font-family:var(--sans);
+    font-size:.78rem;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--noir);
+    background:var(--gold-soft);
+    border:none;
+    padding:18px 40px;
+    cursor:pointer;
+    position:relative;
+    overflow:hidden;
+    transition:transform .5s var(--ease), box-shadow .5s var(--ease), background .5s var(--ease);
+    box-shadow:0 0 0 rgba(239,220,174,0);
+  }
+  .intro-btn:hover{
+    transform:translateY(-2px) scale(1.02);
+    background:var(--gold-glow);
+    box-shadow:0 8px 30px rgba(239,220,174,0.35);
+  }
+  .intro-btn:active{transform:translateY(0) scale(.99);}
+
+  /* ============ SCROLL REVEAL ============ */
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity 1s var(--ease), transform 1s var(--ease);}
+  .reveal.in{opacity:1;transform:translateY(0);}
+  .reveal-scale{opacity:0;transform:scale(.94);transition:opacity 1.1s var(--ease), transform 1.1s var(--ease);}
+  .reveal-scale.in{opacity:1;transform:scale(1);}
+
+  /* ============ LAYOUT HELPERS ============ */
+  section{position:relative;padding:min(14vw,140px) 24px;}
+  .wrap{max-width:1080px;margin:0 auto;}
+  .wrap-narrow{max-width:680px;margin:0 auto;}
+  .center{text-align:center;}
+  .section-title{
+    font-family:var(--serif);
+    font-weight:400;
+    font-size:clamp(1.8rem,4.4vw,3rem);
+    color:var(--ink);
+  }
+  .section-kicker{margin-bottom:18px;}
+  .divider{
+    width:64px;height:1px;background:var(--gold);
+    margin:26px auto;opacity:.6;
+  }
+
+  /* ============ HERO ============ */
+  #hero{
+    min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;
+    padding-top:100px;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(173,138,78,.08), transparent 55%),
+      var(--ivoire);
+  }
+  .hero-eyebrow{margin-bottom:22px;}
+  .hero-name{
+    font-family:var(--serif);
+    font-weight:500;
+    font-size:clamp(2.4rem,8vw,5.2rem);
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    color:var(--ink);
+  }
+  .hero-signature{
+    display:block;margin:14px auto 0;
+    width:210px;height:26px;
+  }
+  .hero-signature path{
+    fill:none;stroke:var(--gold);stroke-width:1.4;
+    stroke-dasharray:340;stroke-dashoffset:340;
+    animation:draw 2.2s var(--ease) 1s forwards;
+  }
+  @keyframes draw{to{stroke-dashoffset:0;}}
+  .hero-number{
+    font-family:var(--serif);
+    font-weight:300;
+    font-size:clamp(4.5rem,16vw,10rem);
+    line-height:.95;
+    color:transparent;
+    -webkit-text-stroke:1.5px var(--gold);
+    margin:18px 0 6px;
+  }
+  .hero-line{
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:clamp(1.05rem,2.4vw,1.4rem);
+    max-width:560px;
+    color:var(--ink-soft);
+    line-height:1.7;
+    margin:20px auto 54px;
+  }
+
+  .photo-frame{
+    position:relative;
+    width:min(360px,80vw);
+    aspect-ratio:4/5;
+    margin:0 auto;
+    border:1px solid var(--line);
+    padding:14px;
+    background:var(--beige);
+    box-shadow:0 40px 70px -30px rgba(28,24,21,.28);
+  }
+  .photo-frame .inner{
+    width:100%;height:100%;position:relative;overflow:hidden;
+    background:linear-gradient(135deg,var(--beige-deep),var(--beige));
+  }
+  .photo-frame img{
+    width:100%;height:100%;object-fit:cover;object-position:center center;
+    transform:scale(1.08);transform-origin:center center;
+  }
+  .photo-frame .placeholder-label{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    flex-direction:column;gap:8px;color:var(--gold);
+    font-family:var(--serif);font-style:italic;font-size:.95rem;text-align:center;padding:20px;
+  }
+  .photo-frame .placeholder-label small{
+    font-family:var(--sans);font-style:normal;letter-spacing:.1em;text-transform:uppercase;
+    font-size:.62rem;color:var(--ink-faint);
+  }
+  .photo-frame::after{
+    content:'';position:absolute;top:-10px;left:-10px;right:-10px;bottom:-10px;
+    border:1px solid var(--line);pointer-events:none;
+  }
+  .frame-deco{
+    position:absolute;width:70px;height:70px;border:1px solid var(--gold-soft);opacity:.5;
+  }
+  .frame-deco.tl{top:-26px;left:-26px;border-right:none;border-bottom:none;}
+  .frame-deco.br{bottom:-26px;right:-26px;border-left:none;border-top:none;}
+
+  .scroll-cue{
+    margin-top:64px;font-size:.68rem;letter-spacing:.25em;text-transform:uppercase;
+    color:var(--ink-faint);display:flex;flex-direction:column;align-items:center;gap:10px;
+  }
+  .scroll-cue .stick{width:1px;height:34px;background:linear-gradient(var(--gold),transparent);animation:pulseCue 2.4s ease-in-out infinite;}
+  @keyframes pulseCue{0%,100%{opacity:.3;}50%{opacity:1;}}
+
+  /* ============ STORY ============ */
+  #story{background:var(--beige);}
+  .story-text{
+    font-family:var(--serif);
+    font-size:clamp(1.05rem,2vw,1.3rem);
+    line-height:1.95;
+    color:var(--ink);
+  }
+  .story-text p{margin-bottom:1.4em;}
+  .story-text .drop{
+    font-family:var(--serif);font-size:3.6em;line-height:.7;float:left;
+    padding-right:14px;padding-top:6px;color:var(--gold);font-weight:400;
+  }
+  .story-note{
+    margin-top:40px;font-family:var(--sans);font-size:.72rem;color:var(--ink-faint);
+    letter-spacing:.02em;border-top:1px dashed var(--line);padding-top:18px;
+  }
+
+  /* ============ TIMELINE ============ */
+  #timeline{background:var(--ivoire);}
+  .timeline-rail{
+    position:relative;max-width:760px;margin:60px auto 0;
+    padding-left:2px;
+  }
+  .timeline-rail::before{
+    content:'';position:absolute;left:15px;top:0;bottom:0;width:1px;
+    background:linear-gradient(var(--line),var(--gold) 20%, var(--gold) 80%,var(--line));
+  }
+  .t-item{position:relative;padding:0 0 66px 56px;}
+  .t-item:last-child{padding-bottom:0;}
+  .t-dot{
+    position:absolute;left:8px;top:6px;width:15px;height:15px;border-radius:50%;
+    background:var(--ivoire);border:1.5px solid var(--gold);
+    transition:background .5s var(--ease), box-shadow .5s var(--ease);
+  }
+  .t-item.in .t-dot{background:var(--gold);box-shadow:0 0 0 6px rgba(173,138,78,.14);}
+  .t-year{font-family:var(--sans);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;display:block;}
+  .t-title{font-family:var(--serif);font-size:clamp(1.3rem,2.6vw,1.7rem);margin-bottom:10px;}
+  .t-desc{color:var(--ink-soft);font-size:.98rem;line-height:1.75;max-width:480px;margin-bottom:16px;}
+  .t-photo{
+    width:150px;aspect-ratio:1/1;border:1px solid var(--line);padding:6px;background:var(--beige);
+  }
+  .t-photo .inner{width:100%;height:100%;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--beige-deep),var(--beige));}
+  .t-photo .placeholder-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--sans);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);text-align:center;padding:8px;}
+
+  /* ============ GALLERY ============ */
+  #gallery{background:var(--noir);color:var(--ivoire);}
+  #gallery .section-title{color:var(--ivoire);}
+  #gallery .eyebrow{color:var(--gold-soft);}
+  .masonry{
+    columns:3 220px;column-gap:16px;margin-top:56px;
+  }
+  @media(max-width:640px){.masonry{columns:2 150px;}}
+  .g-item{
+    break-inside:avoid;margin-bottom:16px;position:relative;overflow:hidden;
+    cursor:pointer;background:var(--noir-soft);border:1px solid rgba(217,190,140,.15);
+  }
+  .g-item .inner{position:relative;width:100%;overflow:hidden;}
+  .g-item:nth-child(3n+1) .inner{aspect-ratio:3/4;}
+  .g-item:nth-child(3n+2) .inner{aspect-ratio:1/1;}
+  .g-item:nth-child(3n) .inner{aspect-ratio:4/5;}
+  .g-item img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease);}
+  .g-item:hover img{transform:scale(1.06);}
+  .g-item .placeholder-label{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;
+    color:var(--gold-soft);font-family:var(--serif);font-style:italic;font-size:.85rem;
+  }
+  .g-overlay{
+    position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.55),transparent 55%);
+    opacity:0;transition:opacity .5s var(--ease);
+    display:flex;align-items:flex-end;padding:14px;
+  }
+  .g-item:hover .g-overlay{opacity:1;}
+  .g-overlay span{font-family:var(--sans);font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ivoire);}
+
+  /* Lightbox */
+  #lightbox{
+    position:fixed;inset:0;background:rgba(10,9,7,.94);z-index:1000;
+    display:flex;align-items:center;justify-content:center;
+    opacity:0;pointer-events:none;transition:opacity .4s var(--ease);
+  }
+  #lightbox.open{opacity:1;pointer-events:auto;}
+  #lightbox .lb-box{max-width:min(84vw,760px);max-height:82vh;position:relative;}
+  #lightbox img{max-height:82vh;width:auto;max-width:100%;object-fit:contain;margin:0 auto;}
+  #lightbox .lb-close, #lightbox .lb-prev, #lightbox .lb-next{
+    position:absolute;background:none;border:none;color:var(--ivoire);cursor:pointer;
+    font-family:var(--serif);font-size:1.6rem;padding:12px;transition:opacity .3s;opacity:.6;
+  }
+  #lightbox .lb-close:hover, #lightbox .lb-prev:hover, #lightbox .lb-next:hover{opacity:1;}
+  #lightbox .lb-close{top:-46px;right:-8px;}
+  #lightbox .lb-prev{left:-54px;top:50%;transform:translateY(-50%);}
+  #lightbox .lb-next{right:-54px;top:50%;transform:translateY(-50%);}
+  @media(max-width:700px){#lightbox .lb-prev{left:4px;}#lightbox .lb-next{right:4px;}#lightbox .lb-close{top:8px;right:8px;}}
+
+  /* ============ 20 MOTS ============ */
+  #words{background:var(--beige);}
+  .words-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+    gap:1px;background:var(--line);margin-top:56px;border:1px solid var(--line);
+  }
+  .w-card{
+    background:var(--beige);padding:30px 24px;transition:background .4s var(--ease);
+  }
+  .w-card:hover{background:var(--ivoire);}
+  .w-num{font-family:var(--sans);font-size:.68rem;letter-spacing:.15em;color:var(--gold);margin-bottom:12px;display:block;}
+  .w-text{font-family:var(--serif);font-style:italic;font-size:1.08rem;line-height:1.6;color:var(--ink);}
+
+  /* ============ BIG MESSAGE ============ */
+  #message{background:var(--noir);color:var(--ivoire);}
+  #message .section-title{color:var(--ivoire);}
+  #message .eyebrow{color:var(--gold-soft);}
+  .message-body{
+    font-family:var(--serif);font-weight:300;font-style:italic;
+    font-size:clamp(1.15rem,2.4vw,1.55rem);
+    line-height:2;color:rgba(250,246,239,.9);
+    margin-top:44px;
+  }
+  .message-body p{margin-bottom:1.3em;}
+  .message-sign{
+    margin-top:40px;font-family:var(--script);font-size:1.6rem;color:var(--gold-soft);
+  }
+
+  /* ============ PRIERES ============ */
+  #prayers{background:var(--ivoire);}
+  .prayer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);margin-top:56px;border:1px solid var(--line);}
+  @media(max-width:800px){.prayer-grid{grid-template-columns:1fr;}}
+  .prayer-card{background:var(--ivoire);padding:40px 32px;}
+  .prayer-card h3{font-family:var(--serif);font-weight:500;font-size:1.2rem;margin-bottom:16px;color:var(--ink);}
+  .prayer-card p{color:var(--ink-soft);line-height:1.85;font-size:.98rem;}
+  .prayer-final{
+    margin-top:2px;background:var(--beige);padding:40px 32px;text-align:center;
+    border:1px solid var(--line);border-top:none;
+  }
+  .prayer-final p{font-family:var(--serif);font-style:italic;font-size:1.2rem;color:var(--ink);}
+
+  /* ============ 20 WISHES ============ */
+  #wishes{background:var(--beige-deep);}
+  .wishes-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+    gap:14px;margin-top:56px;
+  }
+  .wish-chip{
+    background:var(--ivoire);border:1px solid var(--line);
+    padding:20px 16px;text-align:center;transition:transform .4s var(--ease), border-color .4s var(--ease);
+  }
+  .wish-chip:hover{transform:translateY(-4px);border-color:var(--gold);}
+  .wish-num{font-family:var(--serif);font-size:1.3rem;color:var(--gold);display:block;margin-bottom:6px;}
+  .wish-word{font-family:var(--sans);font-size:.82rem;letter-spacing:.03em;color:var(--ink);}
+
+  /* ============ CITATION ============ */
+  #quote{
+    min-height:70vh;display:flex;align-items:center;justify-content:center;text-align:center;
+    background:var(--noir);color:var(--ivoire);
+  }
+  .quote-text{
+    font-family:var(--serif);font-weight:400;font-style:italic;
+    font-size:clamp(1.5rem,5vw,2.8rem);line-height:1.5;max-width:820px;
+  }
+  .quote-text em{color:var(--gold-soft);font-style:italic;}
+
+  /* ============ FOOTER ============ */
+  footer{
+    background:var(--noir);color:var(--ivoire);text-align:center;
+    padding:70px 24px 50px;border-top:1px solid rgba(217,190,140,.15);
+  }
+  .footer-name{font-family:var(--serif);font-size:1.6rem;letter-spacing:.08em;text-transform:uppercase;}
+  .footer-year{margin-top:10px;font-size:.72rem;letter-spacing:.2em;color:var(--gold-soft);text-transform:uppercase;}
+  .footer-sign{margin-top:22px;font-family:var(--script);font-size:1.4rem;color:rgba(250,246,239,.75);}
+  .footer-heart{margin-top:18px;color:var(--gold);font-size:.9rem;opacity:.7;}
+
+  /* ============ BACK TO TOP ============ */
+  #toTop{
+    position:fixed;bottom:26px;right:26px;z-index:500;
+    width:44px;height:44px;border-radius:50%;
+    background:var(--noir);color:var(--gold-soft);border:1px solid var(--gold);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+    opacity:0;pointer-events:none;transform:translateY(10px);
+    transition:opacity .4s var(--ease), transform .4s var(--ease);
+    font-size:1.1rem;
+  }
+  #toTop.show{opacity:1;pointer-events:auto;transform:translateY(0);}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001s !important;transition-duration:.001s !important;}
+  }
+
+  @media(max-width:640px){
+    section{padding:76px 16px;}
+    .intro-track{padding:0 18px;}
+    .skip-intro{top:16px;right:12px;}
+    .intro-btn{max-width:100%;padding:16px 22px;font-size:.68rem;letter-spacing:.14em;}
+    #hero{padding-top:76px;}
+    .hero-line{margin-bottom:38px;}
+    .photo-frame{width:min(320px,calc(100vw - 44px));padding:10px;}
+    .frame-deco{width:52px;height:52px;}
+    .frame-deco.tl{top:-18px;left:-18px;}
+    .frame-deco.br{bottom:-18px;right:-18px;}
+    .timeline-rail{margin-top:42px;}
+    .timeline-rail::before{left:10px;}
+    .t-item{padding-left:42px;padding-bottom:52px;}
+    .t-dot{left:3px;}
+    .t-desc{font-size:.92rem;line-height:1.65;}
+    .t-photo{width:min(180px,100%);}
+    .masonry{columns:2 130px;column-gap:10px;margin-top:40px;}
+    .g-item{margin-bottom:10px;}
+    #lightbox .lb-box{width:calc(100vw - 32px);max-width:none;}
+    #lightbox img{max-height:76vh;}
+    #toTop{right:16px;bottom:16px;}
+    .prayer-grid{border:none;}
+    .words-grid{border:none;}
+  }
+</style>
+</head>
+<body class="locked">
+
+<!-- ============================================================ -->
+<!-- ÉCRAN D'OUVERTURE                                              -->
+<!-- ============================================================ -->
+<div id="intro-gate">
+  <button class="skip-intro" id="skipIntro" aria-label="Passer l'introduction">passer l'intro</button>
+  <div id="particles"></div>
+  <div class="intro-track">
+
+    <div class="intro-slide active" data-t="3200">
+      <p>Une petite surprise t'attend&hellip;</p>
+    </div>
+
+    <div class="intro-slide" data-t="3000">
+      <p>Aujourd'hui n'est pas un jour comme les autres.</p>
+    </div>
+
+    <div class="intro-slide" data-t="3200">
+      <p>Parce qu'une personne exceptionnelle célèbre ses 20 ans&hellip;</p>
+    </div>
+
+    <div class="intro-slide" data-t="4200">
+      <div class="intro-name">Becket Gemima</div>
+      <div class="intro-gap"></div>
+      <div class="intro-number">20 ans</div>
+    </div>
+
+    <div class="intro-slide" data-t="3000">
+      <p>Joyeux anniversaire, Gemima. <span class="intro-heart">&hearts;</span></p>
+    </div>
+
+    <div class="intro-slide long" data-t="5200">
+      <p>20&nbsp;années de vie, de souvenirs, de sourires, de découvertes et de moments qui ont construit la personne magnifique que tu es aujourd'hui.</p>
+    </div>
+
+    <div class="intro-slide long" data-t="6800">
+      <p>Aujourd'hui, une nouvelle page s'ouvre. Une nouvelle décennie commence. Et avant de découvrir toutes les petites attentions qui t'attendent ici, prends simplement un instant pour réaliser une chose&nbsp;: ta présence dans la vie de ceux qui t'aiment est déjà un cadeau.</p>
+    </div>
+
+    <div class="intro-slide" id="lastSlide">
+      <p style="margin-bottom:10px;">Prête à découvrir ce qui a été préparé pour toi&nbsp;?</p>
+      <button class="intro-btn" id="enterBtn">Entrer dans ton histoire ✨</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SITE PRINCIPAL                                                 -->
+<!-- ============================================================ -->
+<div id="main-site">
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="wrap center">
+      <div class="eyebrow hero-eyebrow reveal">20 ans — une histoire qui continue</div>
+      <h1 class="hero-name reveal">Becket Gemima</h1>
+      <svg class="hero-signature reveal" viewBox="0 0 210 26" aria-hidden="true">
+        <path d="M4 18 C 30 4, 55 24, 80 12 S 130 4, 155 16 S 190 8, 206 14"/>
+      </svg>
+      <div class="hero-number reveal-scale">20 ans</div>
+      <p class="hero-line reveal">Une nouvelle décennie commence, mais la plus belle partie de ton histoire reste encore à écrire.</p>
+
+      <!-- Photo principale -->
+      <div class="photo-frame reveal-scale">
+        <span class="frame-deco tl" aria-hidden="true"></span>
+        <span class="frame-deco br" aria-hidden="true"></span>
+        <div class="inner">
+          <img src="P6.jpeg" alt="Becket Gemima" loading="lazy"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="placeholder-label" style="display:none;">
+            Photo principale<br><small>P6.jpeg</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="scroll-cue reveal">
+        <span>Découvrir</span>
+        <span class="stick"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SON HISTOIRE -->
+  <section id="story">
+    <div class="wrap-narrow">
+      <div class="center section-kicker">
+        <div class="eyebrow reveal">Son histoire</div>
+        <div class="divider reveal"></div>
+      </div>
+      <!-- ✏️ MODIFIABLE : personnalisez librement le texte ci-dessous avec les vrais souvenirs de Gemima -->
+      <div class="story-text reveal">
+        <p><span class="drop">I</span>l y a vingt ans, une histoire discrète a commencé quelque part — un premier souffle, un premier regard échangé, le début silencieux de tout ce qui allait suivre. Personne ne sait encore, à cet instant, tout ce que cette petite vie porterait en elle.</p>
+        <p>Puis sont venues les années de l'enfance, faites de rires faciles et de journées qui semblaient ne jamais finir. Des mains qui guident, des visages familiers, de petits riens devenus aujourd'hui de grands souvenirs. C'est dans ces années-là que se dessinent, sans bruit, les premiers traits d'une personnalité.</p>
+        <p>Puis l'adolescence est arrivée, avec ses questions, ses doutes, ses envies de comprendre le monde et d'y trouver sa place. Une période de transformation, où l'on apprend à s'affirmer, à rêver plus grand, à devenir peu à peu soi-même — entourée de ceux qui, à chaque étape, ont choisi de rester.</p>
+        <p>Et aujourd'hui, vingt années plus tard, une jeune femme se tient là où l'enfant a commencé. Elle porte en elle tout ce chemin parcouru — les rires, les leçons, les personnes aimées, les rêves encore intacts — et s'apprête à ouvrir un nouveau chapitre, avec la même lumière qui, depuis toujours, ne demande qu'à grandir.</p>
+      </div>
+      <div class="story-note reveal">✏️ Zone modifiable — personnalisez ce texte avec l'histoire réelle de Gemima.</div>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section id="timeline">
+    <div class="wrap-narrow center">
+      <div class="eyebrow reveal">Vingt ans en quelques moments</div>
+      <h2 class="section-title reveal">Une histoire, étape par étape</h2>
+    </div>
+
+    <div class="timeline-rail">
+
+      <div class="t-item reveal">
+        <span class="t-dot"></span>
+        <span class="t-year">2006 — Le commencement</span>
+        <div class="t-title">Une naissance, un souffle nouveau</div>
+        <p class="t-desc">Le début d'une histoire pleine de promesses, portée dès les premiers instants par l'amour de ceux qui l'attendaient.</p>
+        <div class="t-photo"><div class="inner">
+          <img src="P5.jpeg" alt="" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="placeholder-label" style="display:flex;">P5.jpeg</div>
+        </div></div>
+      </div>
+
+      <div class="t-item reveal">
+        <span class="t-dot"></span>
+        <span class="t-year">Enfance</span>
+        <div class="t-title">Les premiers souvenirs</div>
+        <p class="t-desc">Des rires innocents, des journées sans fin, des rêves encore sans limites — les fondations discrètes d'une belle personne.</p>
+        <div class="t-photo"><div class="inner">
+          <img src="P2.jpeg" alt="" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="placeholder-label" style="display:flex;">P2.jpeg</div>
+        </div></div>
+      </div>
+
+      <div class="t-item reveal">
+        <span class="t-dot"></span>
+        <span class="t-year">Adolescence</span>
+        <div class="t-title">Découvertes et premiers rêves</div>
+        <p class="t-desc">Le temps des questions, des changements, et des rêves qui commencent, doucement, à prendre forme.</p>
+        <div class="t-photo"><div class="inner">
+          <img src="P7.jpeg" alt="" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="placeholder-label" style="display:flex;">P7.jpeg</div>
+        </div></div>
+      </div>
+
+      <div class="t-item reveal">
+        <span class="t-dot"></span>
+        <span class="t-year">Aujourd'hui — 20 ans</span>
+        <div class="t-title">Une nouvelle étape commence</div>
+        <p class="t-desc">Une jeune femme confiante, prête à écrire — à sa manière, à son rythme — les plus belles pages de sa vie.</p>
+        <div class="t-photo"><div class="inner">
+          <img src="P6.jpeg" alt="" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="placeholder-label" style="display:flex;">P6.jpeg</div>
+        </div></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- GALERIE -->
+  <section id="gallery">
+    <div class="wrap center">
+      <div class="eyebrow reveal">Galerie</div>
+      <h2 class="section-title reveal">Des souvenirs, des sourires, une histoire.</h2>
+    </div>
+
+    <div class="wrap">
+      <div class="masonry" id="masonryGrid">
+        <!-- ✏️ MODIFIABLE : remplacez chaque images/xxx.jpg par une vraie photo -->
+      </div>
+    </div>
+  </section>
+
+  <!-- 20 PETITS MOTS -->
+  <section id="words">
+    <div class="wrap center">
+      <div class="eyebrow reveal">20 petits mots</div>
+      <h2 class="section-title reveal">Vingt façons de te souhaiter du bien</h2>
+    </div>
+    <div class="wrap">
+      <div class="words-grid" id="wordsGrid"></div>
+    </div>
+  </section>
+
+  <!-- GRAND MESSAGE -->
+  <section id="message">
+    <div class="wrap-narrow">
+      <div class="center">
+        <div class="eyebrow reveal">Un message pour toi</div>
+        <h2 class="section-title reveal">Pour tes 20 ans&hellip;</h2>
+      </div>
+      <div class="message-body reveal">
+        <p>Vingt ans, ce n'est ni un chiffre ni une simple date sur un calendrier. C'est le résultat de tout ce que tu as traversé, appris, surmonté — et de tout ce que tu es devenue en chemin.</p>
+        <p>Tu as grandi entourée de personnes qui t'aiment, mais c'est bien toi, et toi seule, qui as choisi qui tu voulais être. Ta sensibilité, ta force tranquille, ta manière bien à toi de voir le monde : rien de tout cela n'est arrivé par hasard.</p>
+        <p>Aujourd'hui commence une nouvelle décennie — et avec elle, des rêves à poursuivre, des chemins encore inconnus, des versions de toi que tu n'as pas encore rencontrées. N'aie pas peur d'avancer lentement, ni d'avancer vite : ton rythme est le bon.</p>
+        <p>Sache simplement une chose, aujourd'hui et pour toujours : tu es aimée, tu comptes, et ce que tu portes en toi mérite d'être vécu pleinement.</p>
+      </div>
+      <div class="message-sign reveal center">avec tout notre amour</div>
+    </div>
+  </section>
+
+  <!-- PRIERES ET VOEUX -->
+  <section id="prayers">
+    <div class="wrap center">
+      <div class="eyebrow reveal">Mes prières pour toi</div>
+      <h2 class="section-title reveal">Ce que nous souhaitons pour ta route</h2>
+    </div>
+
+    <div class="wrap">
+      <div class="prayer-grid">
+        <div class="prayer-card reveal">
+          <h3>Prière pour son avenir</h3>
+          <p>Que Dieu accompagne chacun de ses pas, lui donne la sagesse nécessaire pour prendre les bonnes décisions et ouvre devant elle des portes qu'elle n'aurait jamais imaginé franchir.</p>
+        </div>
+        <div class="prayer-card reveal">
+          <h3>Prière pour sa vie</h3>
+          <p>Qu'elle soit entourée de personnes sincères, protégée dans ses déplacements, fortifiée dans les moments difficiles et toujours capable de garder espoir.</p>
+        </div>
+        <div class="prayer-card reveal">
+          <h3>Prière pour ses rêves</h3>
+          <p>Que les projets qu'elle porte dans son cœur puissent prendre forme, et que son travail, sa détermination et sa foi portent leurs fruits.</p>
+        </div>
+      </div>
+      <div class="prayer-final reveal">
+        <p>&ldquo;Que ses 20 ans soient le début d'une décennie extraordinaire.&rdquo;</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 20 CHOSES A SOUHAITER -->
+  <section id="wishes">
+    <div class="wrap center">
+      <div class="eyebrow reveal">20 ans, 20 choses à te souhaiter</div>
+      <h2 class="section-title reveal">Nos vœux, un par année</h2>
+    </div>
+    <div class="wrap">
+      <div class="wishes-grid" id="wishesGrid"></div>
+    </div>
+  </section>
+
+  <!-- CITATION FINALE -->
+  <section id="quote">
+    <div class="quote-text reveal-scale">
+      20 ans, ce n'est pas la fin d'une histoire.<br>
+      C'est <em>le début d'un chapitre</em> que personne n'a encore écrit.
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-name">Becket Gemima</div>
+    <div class="footer-year">20 ans — 2026</div>
+    <div class="footer-sign">Avec amour, pour célébrer une personne unique.</div>
+    <div class="footer-heart">&hearts;</div>
+  </footer>
+
+</div>
+
+<button id="toTop" aria-label="Retour en haut">&uarr;</button>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Aperçu photo">
+  <div class="lb-box">
+    <button class="lb-close" id="lbClose" aria-label="Fermer">&times;</button>
+    <button class="lb-prev" id="lbPrev" aria-label="Photo précédente">&larr;</button>
+    <img id="lbImg" src="" alt="">
+    <button class="lb-next" id="lbNext" aria-label="Photo suivante">&rarr;</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- INTRO SEQUENCE ---------- */
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.intro-slide'));
+  var idx = 0, timer = null;
+
+  function goTo(i){
+    slides.forEach(function(s,j){ s.classList.toggle('active', j===i); });
+    idx = i;
+    if(timer) clearTimeout(timer);
+    var current = slides[i];
+    if(current.id !== 'lastSlide' && i < slides.length - 1){
+      var t = parseInt(current.getAttribute('data-t') || '3000', 10);
+      if(reduced) t = Math.min(t, 900);
+      timer = setTimeout(function(){ goTo(i+1); }, t);
+    }
+  }
+  goTo(0);
+
+  document.getElementById('skipIntro').addEventListener('click', function(){
+    if(timer) clearTimeout(timer);
+    goTo(slides.length - 1);
+  });
+
+  document.getElementById('enterBtn').addEventListener('click', function(){
+    var gate = document.getElementById('intro-gate');
+    gate.classList.add('leaving');
+    document.body.classList.remove('locked');
+    setTimeout(function(){
+      gate.style.display = 'none';
+      initReveals();
+    }, 1450);
+  });
+
+  /* ---------- PARTICLES ---------- */
+  if(!reduced){
+    var pWrap = document.getElementById('particles');
+    for(var p=0; p<22; p++){
+      var el = document.createElement('div');
+      el.className = 'particle';
+      el.style.left = (Math.random()*100)+'%';
+      el.style.setProperty('--driftX', (Math.random()*80-40)+'px');
+      el.style.animationDuration = (8+Math.random()*8)+'s';
+      el.style.animationDelay = (Math.random()*10)+'s';
+      pWrap.appendChild(el);
+    }
+  }
+
+  /* ---------- GALLERY DATA ---------- */
+  var photos = [
+    {src:'P1.jpeg', label:'Photo 01'},
+    {src:'P2.jpeg', label:'Photo 02'},
+    {src:'P3.jpeg', label:'Photo 03'},
+    {src:'P4.jpeg', label:'Photo 04'},
+    {src:'P5.jpeg', label:'Photo 05'},
+    {src:'P6.jpeg', label:'Photo 06'}
+  ];
+  var grid = document.getElementById('masonryGrid');
+  photos.forEach(function(ph, i){
+    var fig = document.createElement('div');
+    fig.className = 'g-item reveal';
+    fig.setAttribute('data-index', i);
+    fig.innerHTML =
+      '<div class="inner">' +
+        '<img src="'+ph.src+'" alt="'+ph.label+'" loading="lazy" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">' +
+        '<div class="placeholder-label" style="display:flex;"><span>'+ph.label+'</span><small style="font-family:var(--sans);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);opacity:.7;">'+ph.src+'</small></div>' +
+        '<div class="g-overlay"><span>'+ph.label+'</span></div>' +
+      '</div>';
+    grid.appendChild(fig);
+  });
+
+  /* ---------- LIGHTBOX ---------- */
+  var lb = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lbImg');
+  var lbIndex = 0;
+
+  function openLB(i){
+    lbIndex = i;
+    lbImg.src = photos[i].src;
+    lbImg.alt = photos[i].label;
+    lb.classList.add('open');
+  }
+  function closeLB(){ lb.classList.remove('open'); }
+  function navLB(dir){
+    lbIndex = (lbIndex + dir + photos.length) % photos.length;
+    lbImg.src = photos[lbIndex].src;
+    lbImg.alt = photos[lbIndex].label;
+  }
+
+  grid.addEventListener('click', function(e){
+    var item = e.target.closest('.g-item');
+    if(item) openLB(parseInt(item.getAttribute('data-index'),10));
+  });
+  document.getElementById('lbClose').addEventListener('click', closeLB);
+  document.getElementById('lbPrev').addEventListener('click', function(){ navLB(-1); });
+  document.getElementById('lbNext').addEventListener('click', function(){ navLB(1); });
+  lb.addEventListener('click', function(e){ if(e.target === lb) closeLB(); });
+  document.addEventListener('keydown', function(e){
+    if(!lb.classList.contains('open')) return;
+    if(e.key === 'Escape') closeLB();
+    if(e.key === 'ArrowLeft') navLB(-1);
+    if(e.key === 'ArrowRight') navLB(1);
+  });
+
+  /* ---------- 20 PETITS MOTS ---------- */
+  var words = [
+    "Que ta joie reste intacte.",
+    "Que tes rêves deviennent réalité.",
+    "Que Dieu guide tes pas.",
+    "Que chaque année t'apporte davantage de sagesse.",
+    "Que ton sourire illumine chaque pièce.",
+    "Que la paix habite ton cœur.",
+    "Que tu oses tout ce que tu désires.",
+    "Que la vie te surprenne, doucement.",
+    "Que l'amour te trouve, toujours vrai.",
+    "Que tes efforts soient récompensés.",
+    "Que ta lumière ne s'éteigne jamais.",
+    "Que chaque échec devienne une leçon.",
+    "Que tu restes fidèle à qui tu es.",
+    "Que le courage guide chacun de tes choix.",
+    "Que les bonnes personnes restent près de toi.",
+    "Que tu avances sans jamais douter de ta valeur.",
+    "Que cette décennie t'apporte l'abondance.",
+    "Que ta foi grandisse avec le temps.",
+    "Que la gratitude reste ton compagnon quotidien.",
+    "Que tes vingt prochaines années dépassent tes plus beaux rêves."
+  ];
+  var wGrid = document.getElementById('wordsGrid');
+  words.forEach(function(w, i){
+    var c = document.createElement('div');
+    c.className = 'w-card reveal';
+    c.innerHTML = '<span class="w-num">'+String(i+1).padStart(2,'0')+'</span><div class="w-text">'+w+'</div>';
+    wGrid.appendChild(c);
+  });
+
+  /* ---------- 20 WISHES ---------- */
+  var wishes = [
+    "La santé","La paix","La joie","L'amour","La sagesse",
+    "La réussite","La confiance","La prospérité","La protection","La créativité",
+    "Le courage","La patience","La foi","De belles rencontres","De belles opportunités",
+    "La réussite professionnelle","L'épanouissement","Des souvenirs inoubliables","La réalisation de ses rêves","Une vie remplie de sens"
+  ];
+  var wsGrid = document.getElementById('wishesGrid');
+  wishes.forEach(function(w, i){
+    var c = document.createElement('div');
+    c.className = 'wish-chip reveal';
+    c.innerHTML = '<span class="wish-num">'+String(i+1).padStart(2,'0')+'</span><div class="wish-word">'+w+'</div>';
+    wsGrid.appendChild(c);
+  });
+
+  /* ---------- SCROLL REVEAL ---------- */
+  function initReveals(){
+    var els = document.querySelectorAll('.reveal, .reveal-scale, .t-item');
+    if(reduced){
+      els.forEach(function(el){ el.classList.add('in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, {threshold:0.15, rootMargin:'0px 0px -60px 0px'});
+    els.forEach(function(el, i){
+      el.style.transitionDelay = (Math.min(i%6,5) * 70)+'ms';
+      io.observe(el);
+    });
+  }
+
+  /* ---------- BACK TO TOP ---------- */
+  var toTop = document.getElementById('toTop');
+  window.addEventListener('scroll', function(){
+    toTop.classList.toggle('show', window.scrollY > 700);
+  });
+  toTop.addEventListener('click', function(){
+    window.scrollTo({top:0, behavior: reduced ? 'auto' : 'smooth'});
+  });
+
+})();
+</script>
+</body>
+</html>
